@@ -1,0 +1,36 @@
+﻿<Window x:Class="DesktopSwitcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DesktopSwitcher"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        Title="DesktopSwitcher" 
+        Icon="/App.ico" 
+        ResizeMode="CanMinimize" 
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="1"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1"/>
+        </Grid.RowDefinitions>
+
+        <!-- Buttons // TOP>DOWN // LEFT>RIGHT // -->
+        <Button Content="HDMI1" Tag="HDMI1" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Height="75" Click="Button_Click_HDMI1" Grid.Column="0" Grid.Row="1" FontWeight="Bold" FontSize="16px" />
+        <Button Content="HDMI2" Tag="HDMI2" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Height="75" Click="Button_Click_HDMI2" Grid.Column="1" Grid.Row="1" FontWeight="Bold" FontSize="16px" />
+        <Button Content="USB-C" Tag="USB-C" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Height="75" Click="Button_Click_USBC"  Grid.Column="2" Grid.Row="1" FontWeight="Bold" FontSize="16px" />
+
+        <!-- Labels // TOP>DOWN // LEFT>RIGHT // -->
+        <Label Content="Switch to:" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Name="lblSwitchTo" Width="auto" Grid.Row="0" Grid.ColumnSpan="3" FontWeight="Bold" FontSize="16px" />
+        <Label Content="Switched to: not switched yet" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" Name="lblSwitchtedTo" Width="200" Grid.Row="2" Grid.ColumnSpan="3" FontStyle="Italic" />
+    </Grid>
+</Window>
