@@ -1,11 +1,15 @@
 name: Compile and Store
 on:
   workflow_dispatch:
-#   push:
-#     branches: [main]
+    inputs:
+      release_version:
+        description: "Enter Release Version"
+        required: true
+        default: "1.0.*"
+
 env:
   DOTNET_VERSION: 7.0.*
-  RELEASE_TAG_VERSION: 1.0.0
+
 jobs:
   build:
     runs-on: windows-latest
@@ -13,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -38,8 +42,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.RELEASE_TAG_VERSION }}
-          release_name: Release ${{ env.RELEASE_TAG_VERSION }}
+          tag_name: ${{ inputs.release_version }}
+          release_name: Release ${{ inputs.release_version }}
           draft: false
           prerelease: false
 
@@ -50,7 +54,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dell-desktop-switcher.zip
-          asset_name: dell-desktop-switcher-v${{ env.RELEASE_TAG_VERSION }}.zip
+          asset_name: dell-desktop-switcher-v${{ inputs.release_version }}.zip
           asset_content_type: application/zip
 
     #   - name: Install Dependencies
@@ -65,8 +69,8 @@ jobs:
     #     env:
     #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #     with:
-    #       tag_name: ${{ env.RELEASE_TAG_VERSION }}
-    #       release_name: Release ${{ env.RELEASE_TAG_VERSION }}
+    #       tag_name: ${{ inputs.release_version }}
+    #       release_name: Release ${{ inputs.release_version }}
     #       draft: false
     #       prerelease: false
 
@@ -78,7 +82,7 @@ jobs:
     #     with:
     #       upload_url: ${{ steps.create_release.outputs.upload_url }}
     #       asset_path: ./bin/Release/netcoreapp7.0/myapp.zip
-    #       asset_name: dell_desktop_switcher_v${{ env.RELEASE_TAG_VERSION }}.zip
+    #       asset_name: dell_desktop_switcher_v${{ inputs.release_version }}.zip
     #       asset_content_type: application/zip
 
     # steps:
@@ -102,15 +106,15 @@ jobs:
     #   #   env:
     #   #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #   #   with:
-    #   #     tag_name: ${{ env.RELEASE_TAG_VERSION }}
-    #   #     release_name: Release ${{ env.RELEASE_TAG_VERSION }}
+    #   #     tag_name: ${{ inputs.release_version }}
+    #   #     release_name: Release ${{ inputs.release_version }}
     #   #     draft: false
     #   #     prerelease: false
 
     #   - name: Upload artifact
     #     uses: actions/upload-artifact@v2
     #     with:
-    #       name: Release-${{ env.RELEASE_TAG_VERSION }}
+    #       name: Release-${{ inputs.release_version }}
     #       path: ${{ github.workspace }}/publish
 
     # steps:
@@ -134,8 +138,8 @@ jobs:
     #     env:
     #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #     with:
-    #       tag_name: ${{ env.RELEASE_TAG_VERSION }}
-    #       release_name: Release ${{ env.RELEASE_TAG_VERSION }}
+    #       tag_name: ${{ inputs.release_version }}
+    #       release_name: Release ${{ inputs.release_version }}
     #       draft: false
     #       prerelease: false
 
@@ -147,5 +151,5 @@ jobs:
     #     with:
     #       upload_url: ${{ steps.create_release.outputs.upload_url }}
     #       asset_path: ./bin/Release/netcoreapp7.0/myapp.zip
-    #       asset_name: dell_desktop_switcher_v${{ env.RELEASE_TAG_VERSION }}.zip
+    #       asset_name: dell_desktop_switcher_v${{ inputs.release_version }}.zip
     #       asset_content_type: application/zip
