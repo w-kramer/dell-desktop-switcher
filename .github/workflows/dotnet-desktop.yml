@@ -39,8 +39,9 @@
 name: .NET Core Desktop
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
+#   push:
+#     branches: [ "main" ]
 #   pull_request:
 #     branches: [ "main" ]
 
