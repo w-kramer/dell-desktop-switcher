@@ -12,36 +12,101 @@ jobs:
     # runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup .NET Core SDK
+      - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Restore NuGet packages
-        run: dotnet restore
-
       - name: Build and publish
-        run: dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true --self-contained true -o ${{ github.workspace }}/publish
+        run: |
+          dotnet restore
+          dotnet build --configuration Release --no-restore
+          dotnet publish --configuration Release --no-build --output ./publish
+          zip -r dell-desktop-switcher-v${{ env.RELEASE_TAG_VERSION }}.zip ./publish/*
 
-      # - name: Create Release
-      #   id: create_release
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ env.RELEASE_TAG_VERSION }}
-      #     release_name: Release ${{ env.RELEASE_TAG_VERSION }}
-      #     draft: false
-      #     prerelease: false
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release-${{ env.RELEASE_TAG_VERSION }}
-          path: ${{ github.workspace }}/publish
+          tag_name: ${{ env.RELEASE_TAG_VERSION }}
+          release_name: Release ${{ env.RELEASE_TAG_VERSION }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dell-desktop-switcher-v${{ env.RELEASE_TAG_VERSION }}.zip
+          asset_name: dell-desktop-switcher-v${{ env.RELEASE_TAG_VERSION }}.zip
+          asset_content_type: application/zip
+
+    #   - name: Install Dependencies
+    #     run: dotnet restore
+
+    #   - name: Build Application
+    #     run: dotnet build --configuration Release
+
+    #   - name: Create Release
+    #     id: create_release
+    #     uses: actions/create-release@v1
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     with:
+    #       tag_name: ${{ env.RELEASE_TAG_VERSION }}
+    #       release_name: Release ${{ env.RELEASE_TAG_VERSION }}
+    #       draft: false
+    #       prerelease: false
+
+    #   - name: Upload Release Asset
+    #     id: upload-release-asset
+    #     uses: actions/upload-release-asset@v1
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     with:
+    #       upload_url: ${{ steps.create_release.outputs.upload_url }}
+    #       asset_path: ./bin/Release/netcoreapp7.0/myapp.zip
+    #       asset_name: dell_desktop_switcher_v${{ env.RELEASE_TAG_VERSION }}.zip
+    #       asset_content_type: application/zip
+
+    # steps:
+    #   - name: Checkout code
+    #     uses: actions/checkout@v2
+
+    #   - name: Setup .NET Core SDK
+    #     uses: actions/setup-dotnet@v1
+    #     with:
+    #       dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    #   - name: Restore NuGet packages
+    #     run: dotnet restore
+
+    #   - name: Build and publish
+    #     run: dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true --self-contained true -o ${{ github.workspace }}/publish
+
+    #   # - name: Create Release
+    #   #   id: create_release
+    #   #   uses: actions/create-release@v1
+    #   #   env:
+    #   #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   #   with:
+    #   #     tag_name: ${{ env.RELEASE_TAG_VERSION }}
+    #   #     release_name: Release ${{ env.RELEASE_TAG_VERSION }}
+    #   #     draft: false
+    #   #     prerelease: false
+
+    #   - name: Upload artifact
+    #     uses: actions/upload-artifact@v2
+    #     with:
+    #       name: Release-${{ env.RELEASE_TAG_VERSION }}
+    #       path: ${{ github.workspace }}/publish
 
     # steps:
     #   - name: Checkout
