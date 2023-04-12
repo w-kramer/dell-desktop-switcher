@@ -40,7 +40,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Release
+          name: Release-${{ env.RELEASE_TAG_VERSION }}
           path: ${{ github.workspace }}/publish
 
     # steps:
