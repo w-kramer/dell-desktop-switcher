@@ -43,6 +43,11 @@ namespace DesktopSwitcher
             string Target = "USB-C";
             Switcher(Target);
         }
+        private void Button_Click_DP(object sender, RoutedEventArgs e)
+        {
+            string Target = "DP";
+            Switcher(Target);
+        }
 
         private void Switcher(string Target)
         {
