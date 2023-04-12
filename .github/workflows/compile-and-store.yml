@@ -25,7 +25,12 @@ jobs:
           dotnet restore
           dotnet build --configuration Release --no-restore
           dotnet publish --configuration Release --no-build --output ./publish
-          zip -r dell-desktop-switcher-v${{ env.RELEASE_TAG_VERSION }}.zip ./publish/*
+
+      - name: Create archive
+        run: |
+          $dirToZip = "./publish/"
+          $zipFile = "dell-desktop-switcher.zip"
+          Compress-Archive -Path "$dirToZip\*" -DestinationPath $zipFile
 
       - name: Create Release
         id: create_release
@@ -44,7 +49,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dell-desktop-switcher-v${{ env.RELEASE_TAG_VERSION }}.zip
+          asset_path: dell-desktop-switcher.zip
           asset_name: dell-desktop-switcher-v${{ env.RELEASE_TAG_VERSION }}.zip
           asset_content_type: application/zip
 
