@@ -26,16 +26,16 @@ jobs:
       - name: Build and publish
         run: dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true --self-contained true -o ${{ github.workspace }}/publish
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.RELEASE_TAG_VERSION }}
-          release_name: Release ${{ env.RELEASE_TAG_VERSION }}
-          draft: false
-          prerelease: false
+      # - name: Create Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ env.RELEASE_TAG_VERSION }}
+      #     release_name: Release ${{ env.RELEASE_TAG_VERSION }}
+      #     draft: false
+      #     prerelease: false
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
