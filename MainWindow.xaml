@@ -7,11 +7,12 @@
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         Title="DesktopSwitcher" 
-        Icon="/App.ico" 
+        Icon="/4202097logomicrosoftmswindows-115591_115710.ico" 
         ResizeMode="CanMinimize" 
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -21,13 +22,15 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="1"/>
         </Grid.RowDefinitions>
 
         <!-- Buttons // TOP>DOWN // LEFT>RIGHT // -->
         <Button Content="HDMI1" Tag="HDMI1" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Height="75" Click="Button_Click_HDMI1" Grid.Column="0" Grid.Row="1" FontWeight="Bold" FontSize="16px" />
         <Button Content="HDMI2" Tag="HDMI2" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Height="75" Click="Button_Click_HDMI2" Grid.Column="1" Grid.Row="1" FontWeight="Bold" FontSize="16px" />
-        <Button Content="USB-C" Tag="USB-C" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Height="75" Click="Button_Click_USBC"  Grid.Column="2" Grid.Row="1" FontWeight="Bold" FontSize="16px" />
+        <Button Content="DP"    Tag="DP"    HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Height="75" Click="Button_Click_DP"  Grid.Column="2" Grid.Row="1" FontWeight="Bold" FontSize="16px" />
+        <Button Content="USB-C" Tag="USB-C" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Height="75" Click="Button_Click_USBC"  Grid.Column="3" Grid.Row="1" FontWeight="Bold" FontSize="16px" />
 
         <!-- Labels // TOP>DOWN // LEFT>RIGHT // -->
         <Label Content="Switch to:" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Name="lblSwitchTo" Width="auto" Grid.Row="0" Grid.ColumnSpan="3" FontWeight="Bold" FontSize="16px" />
