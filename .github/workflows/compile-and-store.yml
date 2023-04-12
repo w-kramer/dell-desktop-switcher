@@ -1,0 +1,43 @@
+name: Compile and Store
+on:
+  push:
+    branches: [main]
+env:
+  DOTNET_VERSION: 7.0
+  RELEASE_TAG_VERSION: 1.0.0
+jobs:
+  build:
+    runs-on: windows-latest
+#     runs-on: ubuntu-latest
+     
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Install Dependencies
+        run: dotnet restore
+      - name: Build Application
+        run: dotnet build --configuration Release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE_TAG_VERSION }}
+          release_name: Release ${{ env.RELEASE_TAG_VERSION }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/Release/netcoreapp7.0/myapp.zip
+          asset_name: dell_desktop_switcher_v${{ env.RELEASE_TAG_VERSION }}.zip
+          asset_content_type: application/zip
