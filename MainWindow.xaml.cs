@@ -28,69 +28,55 @@ namespace DesktopSwitcher
             InitializeComponent();
         }
 
-        private void Button_Click_HDMI1 (object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            string Target = "HDMI1";
-            Switcher(Target);
-        }
-        private void Button_Click_HDMI2(object sender, RoutedEventArgs e)
-        {
-            string Target = "HDMI2";
-            Switcher(Target);
-        }
-        private void Button_Click_USBC(object sender, RoutedEventArgs e)
-        {
-            string Target = "USB-C";
-            Switcher(Target);
-        }
-        private void Button_Click_DP(object sender, RoutedEventArgs e)
-        {
-            string Target = "DP";
-            Switcher(Target);
-        }
-
-        private void Switcher(string Target)
-        {
-            bool isError = false;
-            
-            string StartArguments = "SetActiveInput " + Target;
-            string ProcessPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)") + "\\Dell\\Dell Display Manager\\ddm.exe";
-            
-            if(!File.Exists(ProcessPath))
+            if (sender is Button btn && btn.Tag is string target)
             {
-                string MsgBoxText = "Path " + ProcessPath + " ist not found";
-                MessageBox.Show(MsgBoxText);
-
+                await Switcher(target);
             }
+        }
 
-            Process ddm = new Process();
+        private async Task Switcher(string target)
+        {
+            var startArguments = $"SetActiveInput {target}";
+            var programFilesX86 = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+            if (string.IsNullOrEmpty(programFilesX86))
+            {
+                MessageBox.Show("Die Umgebungsvariable 'ProgramFiles(x86)' ist nicht gesetzt.");
+                return;
+            }
+            var processPath = System.IO.Path.Combine(programFilesX86, "Dell", "Dell Display Manager", "ddm.exe");
+
+            if (!File.Exists(processPath))
+            {
+                MessageBox.Show($"Pfad {processPath} wurde nicht gefunden.");
+                return;
+            }
 
             try
             {
-                // https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo.useshellexecute?view=netframework-4.8
-                ddm.StartInfo.UseShellExecute = false;
+                await Task.Run(() =>
+                {
+                    var ddm = new Process
+                    {
+                        StartInfo = new ProcessStartInfo
+                        {
+                            UseShellExecute = false,
+                            Arguments = startArguments,
+                            FileName = processPath,
+                            CreateNoWindow = true
+                        }
+                    };
+                    ddm.Start();
+                });
 
-                ddm.StartInfo.Arguments = StartArguments;
-
-                ddm.StartInfo.FileName = ProcessPath;
-
-                ddm.StartInfo.CreateNoWindow = true;
-
-                ddm.Start();
-
+                await Dispatcher.InvokeAsync(() => lblSwitchedTo.Content = $"Switched to: {target}");
             }
-
-            catch (Exception e)
+            catch (Exception ex)
             {
-                isError = true;
-                Console.WriteLine(e.Message);
+                MessageBox.Show($"Fehler beim Umschalten: {ex.Message}");
+                lblSwitchedTo.Content = "Fehler beim Umschalten";
             }
-
-            if(isError == false)
-            {
-                lblSwitchtedTo.Content = "Switched to: " + Target;
-            }
-        
         }
     }
 }
